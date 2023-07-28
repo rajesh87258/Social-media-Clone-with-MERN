@@ -28,11 +28,11 @@
     
 //   }
     
-const Post = require('../models/post')
-const User = require('../models/user')
+const Post = require('../models/post');
+const User = require('../models/user');
 
 
-
+ /*
 module.exports.home = async function (req, res) {
   try {
     const posts = await Post.find({}).populate('user')
@@ -47,12 +47,18 @@ module.exports.home = async function (req, res) {
 
 
       .exec();
+      User.find({}, function(err, users){
+
+        return res.render('home', {
+          title: 'Home page!!!',
+          allposts: posts,
+          all_users : users
+
+      });
 
 
 
-    return res.render('home', {
-      title: 'Home page!!!',
-      allposts: posts,
+   
 
     });
 
@@ -62,4 +68,31 @@ module.exports.home = async function (req, res) {
     // Handle error
     console.error(err);
   }
+};
+*/
+
+
+module.exports.home = async function (req, res) {
+    try {
+        const postsPromise = Post.find({}).populate('user').populate({
+            path: 'comments',
+            populate: {
+                path: 'user'
+            }
+        }).exec();
+
+        const usersPromise = User.find({}).exec();
+
+        const [posts, users] = await Promise.all([postsPromise, usersPromise]);
+
+        return res.render('home', {
+            title: 'Home page!!!',
+            allposts: posts,
+            all_users: users
+        });
+
+    } catch (err) {
+        // Handle error
+        console.error(err);
+    }
 };

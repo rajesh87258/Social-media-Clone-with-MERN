@@ -19,11 +19,61 @@ const User = require('../models/user');
    return res.redirect('users/sign-in');
  }
 }*/
-module.exports.profile = function(req, res){
-   return res.render('users_profile', {
-       title: 'User Profile'
-   })
+/*
+module.exports.profile = function (req, res){
+   User.findById(req.params.id, function(err, user){
+      return res.render('users_profile', {
+         title: 'User Profile',
+         profile_user:user
+
+   });
+   
+   });
+}*/
+
+
+
+module.exports.profile = async function(req, res) {
+  try {
+    const user = await User.findById(req.params.id);
+    return res.render('users_profile', {
+      title: 'User Profile',
+      profile_user: user
+    });
+  } catch (err) {
+    console.error(err); // Handle any errors that might occur during the database query
+    return res.status(500).send('Internal Server Error'); // Return an appropriate error response
+  }
+};
+
+
+//FOR UPDATE IN CURRENT USER
+/*module.exports.update = function(req, res){
+   if(req.user.id == req.params.id){
+      User.findByIdAndUpdate(req.params.id, req.body, function(err,user){
+         return res.redirect('back');
+      });
+
+   }else{
+      return res.status(401).send('Unauthorized');
+   }
 }
+*/
+module.exports.update = async function (req, res) {
+   try {
+     if (req.user.id == req.params.id) {
+       await User.findByIdAndUpdate(req.params.id, req.body);
+       return res.redirect('back');
+     } else {
+       return res.status(401).send('Unauthorized');
+     }
+   } catch (err) {
+     console.error(err);
+     return res.status(500).send('Internal Server Error');
+   }
+ };
+ 
+
 // module.exports.profile = async function (req, res) {
 //    try {
 //      if (req.cookies.user_id) {
