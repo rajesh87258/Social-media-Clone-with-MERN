@@ -28,10 +28,14 @@ module.exports.create = async function(req, res) {
             user: req.user._id
         });
 
+        req.flash('success', 'Post Published!');
+
         return res.redirect('back');
     } catch (err) {
-        console.log('error in creating a Post:', err);
-        return;
+        // console.log('error in creating a Post:', err);
+        req.flash('error', err);
+        // return;
+        return res.redirect('back');
     }
 };
 
@@ -63,11 +67,22 @@ module.exports.destroy = async function (req, res) {
         if (post.user == req.user.id) {
             await Post.deleteOne({ _id: req.params.id });
             await Comment.deleteMany({ post: req.params.id });
-        }
+
+            req.flash('success', 'Post and associated Comment deleted!');
+
+            return res.redirect('back');
+        } else{
+
+            
+        req.flash('error', 'You can not delete this Post!');
 
         return res.redirect('back');
+
+        }
+
     } catch (err) {
-        console.error(err); // Handle the error appropriately
+        // console.error(err); // Handle the error appropriately
+        req.flash('error', err);
         return res.redirect('back');
     }
 };

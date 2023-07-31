@@ -40,12 +40,18 @@ module.exports.create = async function (req, res) {
       post.comments.push(comment);
       await post.save();
 
-      res.redirect('/');
+      req.flash('success', 'Comment Published!');
+//
+
+    return res.redirect('back');
+      // res.redirect('/');
     }
   } catch (err) {
     // Handle error appropriately
-    console.error(err);
-    res.status(500).send('Internal Server Error');
+    // console.error(err);
+    req.flash('error', err);
+    return res.redirect('back');
+    // res.status(500).send('Internal Server Error');
   }
 };
 
@@ -73,9 +79,13 @@ module.exports.destroy = async function (req, res) {
           await Post.findByIdAndUpdate(postId, { $pull: { comments: req.params.id } });
       }
 
+      req.flash('success', 'associated Comment deleted!');
+
       return res.redirect('back');
   } catch (err) {
-      console.error(err); // Handle the error appropriately
+      // console.error(err); // Handle the error appropriately
+      req.flash('error', err);
+
       return res.redirect('back');
   }
 };

@@ -194,6 +194,7 @@ module.exports.createSession = function(req, res){
 }
 */
 module.exports.createSession = function(req, res){
+   req.flash('success', 'Logged in Successfull');
    return res.redirect('/');
 }
 
@@ -233,6 +234,7 @@ module.exports.destroySession = function(req, res) {
      if (err) {
        console.error('Error while logging out:', err);
      }
+     req.flash('success', 'You have Logged out!!!!');
      // After successful logout, redirect the user to the desired location (e.g., home page)
      return res.redirect('/');
    });
