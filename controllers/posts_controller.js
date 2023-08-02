@@ -72,8 +72,18 @@ module.exports.destroy = async function (req, res) {
 
             return res.redirect('back');
         } else{
+//CHECK REQUEST TYPE
+            // if (req.xhr){
+            //     return res.status(200).json({
+            //         data: {
+            //             post: post
+            //         },
+            //         message: "Post created!"
+            //     });
+            // }
+            // //
 
-            
+
         req.flash('error', 'You can not delete this Post!');
 
         return res.redirect('back');
