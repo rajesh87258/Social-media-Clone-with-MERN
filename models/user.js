@@ -42,7 +42,14 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String
-    }
+    },
+    
+    friendships: [
+        { 
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Friendship' 
+        }
+    ]
   },
   {
     timestamps: true // it provides timestamps for creation and update

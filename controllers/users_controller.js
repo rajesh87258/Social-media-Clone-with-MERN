@@ -283,3 +283,13 @@ module.exports.destroySession = function(req, res) {
      return res.redirect('/');
    });
  };
+
+
+ module.exports.removeFriend  = function(req, res){
+
+   
+
+   console.log(req.params.id);
+   return res.redirect('back');
+
+ }

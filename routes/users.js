@@ -25,4 +25,6 @@ router.get('/auth/google', passport.authenticate('google', {scope: ['profile', '
 
 router.get('/auth/google/callback', passport.authenticate('google',{failureRedirect:'/users/sign-in'}), usersController.createSession);
 
+router.get('/remove/:id', passport.checkAuthentication, usersController.removeFriend );
+
 module.exports = router;
